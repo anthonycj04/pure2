@@ -15,6 +15,7 @@ __pure_set_default pure_symbol_prompt "❯"
 __pure_set_default pure_symbol_git_down_arrow "⇣"
 __pure_set_default pure_symbol_git_up_arrow "⇡"
 __pure_set_default pure_symbol_git_dirty "*"
+__pure_set_default pure_symbol_git_stashed "\$"
 __pure_set_default pure_symbol_horizontal_bar "—"
 
 # Colors
@@ -101,6 +102,11 @@ function pre_prompt --on-event fish_prompt
       set git_dirty $pure_symbol_git_dirty
     end
 
+    set -l is_git_stashed (command git rev-parse --verify --quiet refs/stash ^/dev/null)
+    if test -n "$is_git_stashed"
+      set git_stashed $pure_symbol_git_stashed
+    end
+
     # Check if there is an upstream configured
     command git rev-parse --abbrev-ref '@{upstream}' >/dev/null ^&1; and set -l has_upstream
     if set -q has_upstream
@@ -120,7 +126,7 @@ function pre_prompt --on-event fish_prompt
     end
 
     # Format Git prompt output
-    set pre_prompt $pre_prompt "$pure_color_gray$git_branch_name$git_dirty$pure_color_normal$pure_color_cyan$git_arrows$pure_color_normal "
+    set pre_prompt $pre_prompt "$pure_color_gray$git_branch_name$git_dirty$pure_color_red$git_stashed$pure_color_cyan$git_arrows$pure_color_normal "
   end
 
   if test $pure_user_host_location -ne 1
