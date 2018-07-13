@@ -17,6 +17,7 @@ __pure_set_default pure_symbol_git_up_arrow "⇡"
 __pure_set_default pure_symbol_git_dirty "*"
 __pure_set_default pure_symbol_git_stashed "\$"
 __pure_set_default pure_symbol_horizontal_bar "—"
+__pure_set_default pure_symbol_bg_job "%"
 
 # Colors
 
@@ -139,6 +140,9 @@ function pre_prompt --on-event fish_prompt
   end
 
   set pre_prompt $pre_prompt "$pure_color_yellow$command_duration$pure_color_normal"
+
+  jobs -p > /dev/null
+    and set pre_prompt $pre_prompt $pure_symbol_bg_job
 
   echo -e -s $pre_prompt
 end
